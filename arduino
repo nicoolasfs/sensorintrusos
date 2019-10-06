@@ -1,0 +1,90 @@
+//Sensor intrusos
+int i;
+float sinVal;
+int toneVal;
+const int TriggerPin = PB10;
+const int EchoPin = PB11;
+const int BombilloBlanco= PB6;
+const int BombilloVerde= PB7;
+const int BombilloAmarillo= PB1;
+const int BombilloRojo= PB9;
+const int Zumbador =PA10;
+
+void setup() {
+  Serial.begin(9600);
+  pinMode(TriggerPin, OUTPUT);
+  pinMode(EchoPin, INPUT);
+  pinMode(BombilloBlanco,OUTPUT);
+  pinMode(BombilloVerde,OUTPUT);
+  pinMode(BombilloAmarillo,OUTPUT);
+  pinMode(BombilloRojo,OUTPUT);
+  pinMode(Zumbador, OUTPUT);
+ 
+}
+
+void loop() {
+  int cm = ping(TriggerPin, EchoPin);
+  Serial.print("Distancia: ");
+  Serial.println(cm);
+  delay(1000);
+}
+
+
+int ping(int TriggerPin, int EchoPin) {
+  long duration, distanceCm;
+  
+  digitalWrite(TriggerPin, LOW);  
+  delayMicroseconds(2);
+  digitalWrite(TriggerPin, HIGH);  //generamos Trigger (disparo) de 5ms
+  delayMicroseconds(5);
+  digitalWrite(TriggerPin, LOW);
+  
+  duration = pulseIn(EchoPin, HIGH);  //medimos el tiempo entre pulsos, en microseg
+  
+  distanceCm = duration * 10 / 292/ 2;   //convertimos a distancia, en cm
+ 
+  if (distanceCm <=20){
+     digitalWrite(BombilloBlanco,LOW);
+  digitalWrite(BombilloVerde,LOW);
+  digitalWrite(BombilloAmarillo,LOW);
+  digitalWrite(BombilloRojo,HIGH);
+ /* digitalWrite(Zumbador,255);
+  delay(200);
+   digitalWrite(Zumbador,100);
+   delay(200);*/
+   for(i=200;i<=230; i++){
+    analogWrite(Zumbador, i);
+    delay(50);
+    analogWrite(Zumbador,0);
+    delay(50);
+ }}
+ else
+ if(distanceCm<=35 && distanceCm>=20){
+  digitalWrite(BombilloBlanco,HIGH);
+  digitalWrite(BombilloVerde,HIGH);
+  digitalWrite(BombilloAmarillo,LOW);
+  digitalWrite(BombilloRojo,LOW);
+  digitalWrite(Zumbador,0);
+}
+else if(distanceCm<=50 && distanceCm>=35){
+  digitalWrite(BombilloBlanco,HIGH);
+  digitalWrite(BombilloVerde,LOW);
+  digitalWrite(BombilloAmarillo,HIGH);
+  digitalWrite(BombilloRojo,LOW);
+   digitalWrite(Zumbador,0);
+}
+else if(distanceCm<=65 && distanceCm>=50  ){
+   digitalWrite(BombilloBlanco,HIGH);
+  digitalWrite(BombilloVerde,LOW);
+  digitalWrite(BombilloAmarillo,LOW);
+  digitalWrite(BombilloRojo,HIGH);
+   digitalWrite(Zumbador,0);
+}
+else{
+digitalWrite(BombilloBlanco,HIGH);
+ digitalWrite(BombilloVerde,LOW);
+  digitalWrite(BombilloAmarillo,LOW);
+  digitalWrite(BombilloRojo,LOW);
+  digitalWrite(Zumbador,0);
+}
+}
